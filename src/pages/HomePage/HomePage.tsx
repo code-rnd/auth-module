@@ -1,11 +1,17 @@
-import { FC, useEffect } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Layout, useAuth } from "../../shared";
+import { removeUser, useAppDispatch } from "../../store";
 
 export const HomePage: FC = () => {
+  const dispatch = useAppDispatch();
   const navi = useNavigate();
-  const { isAuth } = useAuth();
+  const { isAuth, email } = useAuth();
+
+  const logout = useCallback(() => {
+    dispatch(removeUser());
+  }, [dispatch]);
 
   useEffect(() => {
     !isAuth && navi("/login");
@@ -13,7 +19,10 @@ export const HomePage: FC = () => {
 
   return (
     <Layout>
-      <div>HomePage</div>
+      <div>
+        <h1>Home</h1>
+        <button onClick={logout}>Logout from {email}</button>
+      </div>
     </Layout>
   );
 };
